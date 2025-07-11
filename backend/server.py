@@ -32,7 +32,7 @@ class UserCreate(BaseModel):
     email: str
     password: str
     name: str
-    role: str = "user"  # user or admin
+    role: str = "user"  # Default role is user, admin assigns roles
 
 class UserLogin(BaseModel):
     email: str
