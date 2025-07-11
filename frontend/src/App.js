@@ -349,7 +349,7 @@ const StudentModal = ({ student, isOpen, onClose, onUpdate }) => {
                 onChange={(e) => setCurrentSemester(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(sem => (
+                {[1, 2, 3, 4].map(sem => (
                   <option key={sem} value={sem.toString()}>{sem}</option>
                 ))}
               </select>
