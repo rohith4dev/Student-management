@@ -383,6 +383,76 @@ async def delete_user(user_id: str, user_email: str = None):
     
     return {"message": "User deleted successfully"}
 
+@api_router.put("/users/{user_id}/role")
+async def update_user_role(user_id: str, role_data: dict, user_email: str = None):
+    if not user_email:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    # Check if user is admin
+    user_doc = await db.users.find_one({"email": user_email})
+    if not user_doc or user_doc["role"] != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can update user roles")
+    
+    target_user = await db.users.find_one({"id": user_id})
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    new_role = role_data.get("role")
+    if new_role not in ["user", "admin"]:
+        raise HTTPException(status_code=400, detail="Invalid role")
+    
+    await db.users.update_one({"id": user_id}, {"$set": {"role": new_role}})
+    
+    # Log activity
+    activity = ActivityLog(
+        action="USER_ROLE_UPDATED",
+        user_email=user_email,
+        details={"target_user": target_user["email"], "old_role": target_user["role"], "new_role": new_role}
+    )
+    await db.activity_logs.insert_one(activity.dict())
+    
+    return {"message": "User role updated successfully"}
+
+@api_router.put("/users/profile")
+async def update_profile(profile_data: dict, user_email: str = None):
+    if not user_email:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    user_doc = await db.users.find_one({"email": user_email})
+    if not user_doc:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Verify current password
+    current_password = profile_data.get("currentPassword")
+    if not current_password or not verify_password(current_password, user_doc["password"]):
+        raise HTTPException(status_code=400, detail="Invalid current password")
+    
+    # Update profile data
+    update_data = {}
+    if "name" in profile_data:
+        update_data["name"] = profile_data["name"]
+    if "email" in profile_data:
+        # Check if new email is already taken
+        if profile_data["email"] != user_email:
+            existing_user = await db.users.find_one({"email": profile_data["email"]})
+            if existing_user:
+                raise HTTPException(status_code=400, detail="Email already in use")
+        update_data["email"] = profile_data["email"]
+    if "newPassword" in profile_data and profile_data["newPassword"]:
+        update_data["password"] = hash_password(profile_data["newPassword"])
+    
+    await db.users.update_one({"email": user_email}, {"$set": update_data})
+    
+    # Log activity
+    activity = ActivityLog(
+        action="PROFILE_UPDATED",
+        user_email=user_email,
+        details={"updated_fields": list(update_data.keys())}
+    )
+    await db.activity_logs.insert_one(activity.dict())
+    
+    return {"message": "Profile updated successfully"}
+
 # Activity Logs (Admin only)
 @api_router.get("/activity-logs")
 async def get_activity_logs(user_email: str = None):
