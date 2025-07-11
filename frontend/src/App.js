@@ -209,9 +209,10 @@ const StudentModal = ({ student, isOpen, onClose, onUpdate }) => {
   const { user } = useAuth();
 
   const commonSubjects = [
-    'Mathematics', 'Physics', 'Chemistry', 'Programming', 'Data Structures',
-    'Computer Networks', 'Database Systems', 'Operating Systems', 'Software Engineering',
-    'Machine Learning', 'Artificial Intelligence', 'Web Development'
+    'Financial Management', 'Marketing Management', 'Human Resource Management', 
+    'Operations Management', 'Strategic Management', 'Business Analytics',
+    'Corporate Finance', 'Investment Management', 'Business Law', 'Economics',
+    'Organizational Behavior', 'Project Management'
   ];
 
   useEffect(() => {
