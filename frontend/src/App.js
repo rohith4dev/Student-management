@@ -737,11 +737,14 @@ const AddStudentModal = ({ isOpen, onClose, onAdd }) => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Stream</option>
-              <option value="Computer Science">Computer Science</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Mechanical">Mechanical</option>
-              <option value="Civil">Civil</option>
-              <option value="Electrical">Electrical</option>
+              <option value="MBA in Finance">MBA in Finance</option>
+              <option value="MBA in Human Resources">MBA in Human Resources</option>
+              <option value="MBA in Business Management">MBA in Business Management</option>
+              <option value="MBA in Marketing">MBA in Marketing</option>
+              <option value="MBA in Operations">MBA in Operations</option>
+              <option value="MBA in Information Technology">MBA in Information Technology</option>
+              <option value="MBA in International Business">MBA in International Business</option>
+              <option value="MBA in Entrepreneurship">MBA in Entrepreneurship</option>
             </select>
           </div>
 
