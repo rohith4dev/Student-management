@@ -472,8 +472,11 @@ const StudentCard = ({ student, onEdit, onDelete, isAdmin }) => {
 // Main App Component
 const App = () => {
   const [students, setStudents] = useState([]);
+  const [users, setUsers] = useState([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
+  const [showUserManagementModal, setShowUserManagementModal] = useState(false);
+  const [showAdminSettingsModal, setShowAdminSettingsModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { user, logout, isLoading: authLoading } = useAuth();
 
@@ -490,9 +493,23 @@ const App = () => {
     setIsLoading(false);
   };
 
+  const fetchUsers = async () => {
+    if (!user || user.role !== 'admin') return;
+    
+    try {
+      const response = await axios.get(`${API}/users?user_email=${user.email}`);
+      setUsers(response.data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       fetchStudents();
+      if (user.role === 'admin') {
+        fetchUsers();
+      }
     }
   }, [user]);
 
