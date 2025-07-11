@@ -565,6 +565,22 @@ const App = () => {
                 <>
                   <span className="text-gray-700">Welcome, {user.name}</span>
                   <span className="text-sm text-gray-500">({user.role})</span>
+                  {user.role === 'admin' && (
+                    <>
+                      <button
+                        onClick={() => setShowUserManagementModal(true)}
+                        className="px-3 py-1 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors text-sm"
+                      >
+                        Manage Users
+                      </button>
+                      <button
+                        onClick={() => setShowAdminSettingsModal(true)}
+                        className="px-3 py-1 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors text-sm"
+                      >
+                        Settings
+                      </button>
+                    </>
+                  )}
                   <button
                     onClick={logout}
                     className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
