@@ -156,11 +156,11 @@ async def register(user_data: UserCreate):
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     
-    # Create new user
+    # Create new user with default role 'user'
     user = User(
         email=user_data.email,
         name=user_data.name,
-        role=user_data.role
+        role="user"  # Always default to user role
     )
     
     user_dict = user.dict()
@@ -172,7 +172,7 @@ async def register(user_data: UserCreate):
     activity = ActivityLog(
         action="USER_REGISTERED",
         user_email=user_data.email,
-        details={"name": user_data.name, "role": user_data.role}
+        details={"name": user_data.name, "role": "user"}
     )
     await db.activity_logs.insert_one(activity.dict())
     
