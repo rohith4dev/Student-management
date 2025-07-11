@@ -681,6 +681,20 @@ const App = () => {
         onClose={() => setShowAddStudentModal(false)}
         onAdd={handleAddStudent}
       />
+
+      <UserManagementModal
+        isOpen={showUserManagementModal}
+        onClose={() => setShowUserManagementModal(false)}
+        users={users}
+        onRefresh={fetchUsers}
+        currentUser={user}
+      />
+
+      <AdminSettingsModal
+        isOpen={showAdminSettingsModal}
+        onClose={() => setShowAdminSettingsModal(false)}
+        currentUser={user}
+      />
     </div>
   );
 };
